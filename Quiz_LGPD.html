@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz LGPD — Boas Práticas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;1,400&display=swap');
+
+  :root {
+    --bg: #050f1a;
+    --card: #0d1f35;
+    --card2: #112840;
+    --teal: #0891b2;
+    --teal-light: #22d3ee;
+    --amber: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --white: #f0f9ff;
+    --muted: #64748b;
+    --border: #1e3a5f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--white);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-image: radial-gradient(ellipse at 20% 20%, rgba(8,145,178,0.12) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 80%, rgba(245,158,11,0.06) 0%, transparent 60%);
+  }
+
+  .container {
+    width: 100%;
+    max-width: 780px;
+  }
+
+  /* INTRO */
+  .intro {
+    text-align: center;
+    padding: 60px 40px;
+    background: var(--card);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .shield-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 20px rgba(8,145,178,0.5));
+  }
+
+  .intro h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--teal-light), var(--amber));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .intro p {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 480px;
+    margin: 0 auto 30px;
+    line-height: 1.6;
+  }
+
+  .tag-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+
+  .tag {
+    background: rgba(8,145,178,0.15);
+    border: 1px solid rgba(8,145,178,0.3);
+    color: var(--teal-light);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .btn-start {
+    background: linear-gradient(135deg, var(--teal), #0e7490);
+    color: white;
+    border: none;
+    padding: 16px 48px;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-start:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(8,145,178,0.35);
+  }
+
+  /* PROGRESS */
+  .progress-bar {
+    background: var(--card2);
+    border-radius: 8px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    border-radius: 8px;
+    transition: width 0.5s ease;
+  }
+
+  .progress-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .score-badge {
+    background: rgba(245,158,11,0.15);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: var(--amber);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: var(--card);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 36px 40px;
+    animation: fadeIn 0.35s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-number {
+    font-size: 0.75rem;
+    color: var(--teal);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .q-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.18rem;
+    font-weight: 600;
+    color: var(--white);
+    line-height: 1.55;
+    margin-bottom: 28px;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option {
+    background: var(--card2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+  }
+
+  .option:hover:not(.disabled) {
+    border-color: var(--teal);
+    background: rgba(8,145,178,0.1);
+    transform: translateX(4px);
+  }
+
+  .option.selected {
+    border-color: var(--teal);
+    background: rgba(8,145,178,0.12);
+  }
+
+  .option.correct {
+    border-color: var(--green);
+    background: rgba(16,185,129,0.12);
+  }
+
+  .option.wrong {
+    border-color: var(--red);
+    background: rgba(239,68,68,0.1);
+  }
+
+  .option.disabled { cursor: default; }
+
+  .opt-letter {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(8,145,178,0.2);
+    border: 1px solid rgba(8,145,178,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--teal-light);
+    flex-shrink: 0;
+    transition: all 0.2s;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .option.correct .opt-letter { background: rgba(16,185,129,0.3); border-color: var(--green); color: var(--green); }
+  .option.wrong .opt-letter { background: rgba(239,68,68,0.2); border-color: var(--red); color: var(--red); }
+
+  .opt-text {
+    font-size: 0.93rem;
+    color: #cbd5e1;
+    line-height: 1.45;
+  }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .feedback.correct-fb { background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; }
+  .feedback.wrong-fb { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); color: #fca5a5; }
+  .feedback strong { display: block; margin-bottom: 4px; font-family: 'Space Grotesk', sans-serif; }
+
+  /* NEXT */
+  .btn-next {
+    margin-top: 24px;
+    width: 100%;
+    background: linear-gradient(135deg, var(--teal), #0e7490);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-next:hover { box-shadow: 0 6px 20px rgba(8,145,178,0.3); transform: translateY(-1px); }
+
+  /* RESULT */
+  .result {
+    background: var(--card);
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    padding: 50px 40px;
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .result-icon { font-size: 72px; margin-bottom: 20px; }
+
+  .result h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .result-score {
+    font-size: 4rem;
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+    background: linear-gradient(135deg, var(--teal-light), var(--amber));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin: 16px 0;
+  }
+
+  .result-label { color: var(--muted); font-size: 0.95rem; margin-bottom: 28px; }
+
+  .result-breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin: 24px 0;
+  }
+
+  .rb-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 10px;
+  }
+
+  .rb-value { font-size: 1.5rem; font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+  .rb-label { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+
+  .btn-retry {
+    background: transparent;
+    color: var(--teal-light);
+    border: 2px solid var(--border);
+    padding: 14px 36px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    font-family: 'Space Grotesk', sans-serif;
+    margin-top: 8px;
+  }
+  .btn-retry:hover { border-color: var(--teal); background: rgba(8,145,178,0.1); }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- INTRO -->
+  <div id="intro" class="intro">
+    <div class="shield-icon">🛡️</div>
+    <h1>Quiz LGPD</h1>
+    <p>Teste seus conhecimentos sobre a Lei Geral de Proteção de Dados e as boas práticas de proteção de dados pessoais.</p>
+    <div class="tag-row">
+      <span class="tag">10 Questões</span>
+      <span class="tag">Nível Introdutório</span>
+      <span class="tag">Feedback Imediato</span>
+      <span class="tag">~5 minutos</span>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">Começar Quiz →</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="hidden">
+    <div class="progress-text">
+      <span id="q-counter">Questão 1 de 10</span>
+      <span class="score-badge" id="score-display">⭐ 0 pontos</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+    </div>
+    <div class="question-card">
+      <div class="q-number" id="q-number">QUESTÃO 1</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <div id="feedback" class="hidden"></div>
+      <button id="btn-next" class="btn-next hidden" onclick="nextQuestion()">Próxima questão →</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="result hidden">
+    <div class="result-icon" id="result-icon"></div>
+    <h2 id="result-title"></h2>
+    <div class="result-score" id="result-score"></div>
+    <div class="result-label" id="result-label"></div>
+    <div class="result-breakdown">
+      <div class="rb-card">
+        <div class="rb-value" id="rb-correct" style="color: var(--green)"></div>
+        <div class="rb-label">Corretas</div>
+      </div>
+      <div class="rb-card">
+        <div class="rb-value" id="rb-wrong" style="color: var(--red)"></div>
+        <div class="rb-label">Erradas</div>
+      </div>
+      <div class="rb-card">
+        <div class="rb-value" id="rb-pct" style="color: var(--amber)"></div>
+        <div class="rb-label">Aproveitamento</div>
+      </div>
+    </div>
+    <button class="btn-retry" onclick="restartQuiz()">↺ Refazer Quiz</button>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  {
+    q: "O que é um dado pessoal segundo a LGPD?",
+    opts: [
+      "Apenas documentos com foto, como RG e CNH",
+      "Qualquer informação que identifique ou permita identificar uma pessoa natural",
+      "Somente dados financeiros como CPF e número de conta",
+      "Informações armazenadas em servidores corporativos"
+    ],
+    answer: 1,
+    fb: "Dado pessoal é qualquer informação que possa identificar uma pessoa — nome, e-mail, IP, localização, cookies, etc. Vai muito além de documentos formais!"
+  },
+  {
+    q: "Qual das opções a seguir é um exemplo de dado pessoal SENSÍVEL?",
+    opts: [
+      "Endereço residencial",
+      "Nome completo",
+      "Informação sobre condição de saúde ou diagnóstico médico",
+      "Número de pedido de compra"
+    ],
+    answer: 2,
+    fb: "Dados sensíveis incluem saúde, biometria, origem racial/étnica, religião, orientação sexual e filiação política. Requerem proteção reforçada e base legal específica!"
+  },
+  {
+    q: "Para tratar dados pessoais de clientes, uma empresa precisa obrigatoriamente de:",
+    opts: [
+      "Aprovação do gerente de TI",
+      "Uma base legal prevista na LGPD que justifique o tratamento",
+      "Apenas uma política de privacidade publicada no site",
+      "Autorização do Ministério da Justiça"
+    ],
+    answer: 1,
+    fb: "Toda operação com dados pessoais exige uma base legal. A LGPD prevê 10 bases legais, como consentimento, contrato, obrigação legal e legítimo interesse."
+  },
+  {
+    q: "Um cliente pediu para ver quais dados a empresa tem sobre ele. Isso se chama:",
+    opts: [
+      "Direito à portabilidade",
+      "Direito ao anonimato",
+      "Direito de acesso aos dados",
+      "Direito de oposição"
+    ],
+    answer: 2,
+    fb: "O direito de acesso garante que o titular possa saber quais dados a empresa possui sobre ele, como são usados e com quem são compartilhados. A empresa deve responder!"
+  },
+  {
+    q: "Você precisa enviar uma planilha com dados de clientes para um fornecedor parceiro. O que deve fazer antes?",
+    opts: [
+      "Mandar pelo WhatsApp pessoal por ser mais rápido",
+      "Verificar se há base legal, assinar DPA com o parceiro e usar canal seguro",
+      "Apagar os nomes e mandar normalmente por e-mail comum",
+      "Nada — compartilhamento com parceiros é sempre permitido"
+    ],
+    answer: 1,
+    fb: "O compartilhamento exige base legal, acordo de processamento de dados (DPA) com o parceiro e uso de canais seguros. Nunca envie dados pessoais por canais não aprovados!"
+  },
+  {
+    q: "Qual é a multa máxima que a ANPD pode aplicar por infração à LGPD?",
+    opts: [
+      "R$ 10 mil por infração",
+      "Até 2% do faturamento, limitado a R$ 50 milhões por infração",
+      "10% do lucro anual da empresa",
+      "A lei não prevê multas financeiras, apenas advertências"
+    ],
+    answer: 1,
+    fb: "A LGPD prevê multas de até 2% do faturamento do grupo no Brasil, limitadas a R$ 50 milhões por infração. Além disso, a ANPD pode bloquear ou eliminar os dados infringidos!"
+  },
+  {
+    q: "O conceito de 'Privacy by Design' na LGPD significa:",
+    opts: [
+      "Contratar um designer especialista em privacidade",
+      "Criar um logotipo de privacidade para o site",
+      "Incorporar a proteção de dados desde o início do desenvolvimento de sistemas e processos",
+      "Publicar uma política de privacidade no site"
+    ],
+    answer: 2,
+    fb: "Privacy by Design significa construir a privacidade desde a concepção — nas decisões de arquitetura, código e processos. Privacidade como padrão, não como recurso adicional!"
+  },
+  {
+    q: "Um colaborador percebe que um hacker pode ter acessado uma base de dados com informações de clientes. O que ele deve fazer?",
+    opts: [
+      "Aguardar para ter certeza antes de reportar",
+      "Deletar os logs para não gerar problema",
+      "Reportar imediatamente ao DPO/responsável de segurança da empresa",
+      "Comunicar diretamente à ANPD sem avisar a empresa"
+    ],
+    answer: 2,
+    fb: "Em casos de incidente, o colaborador deve reportar imediatamente internamente. A empresa tem prazo para investigar e, se confirmado o vazamento, comunicar à ANPD e aos titulares afetados."
+  },
+  {
+    q: "O princípio de 'minimização de dados' da LGPD determina que:",
+    opts: [
+      "A empresa deve reduzir o número de funcionários com acesso a dados",
+      "Apenas dados estritamente necessários para a finalidade declarada devem ser coletados",
+      "Os dados devem ser armazenados no menor espaço possível",
+      "O banco de dados deve ser minimamente protegido"
+    ],
+    answer: 1,
+    fb: "Minimização significa coletar apenas o que é necessário para a finalidade declarada. Coletar dados 'por precaução' ou 'caso precise no futuro' viola este princípio!"
+  },
+  {
+    q: "A sigla DPO na LGPD se refere a:",
+    opts: [
+      "Departamento de Proteção Operacional",
+      "Data Protection Organization — organização de proteção de dados",
+      "Encarregado de Proteção de Dados (Data Protection Officer)",
+      "Documento de Política Organizacional"
+    ],
+    answer: 2,
+    fb: "O DPO (Encarregado de Proteção de Dados) é o canal entre a empresa, os titulares e a ANPD. É obrigatório para empresas que tratam dados em larga escala ou dados sensíveis."
+  }
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+function startQuiz() {
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  loadQuestion();
+}
+
+function loadQuestion() {
+  answered = false;
+  const q = questions[current];
+  document.getElementById('q-number').textContent = `QUESTÃO ${current + 1}`;
+  document.getElementById('q-counter').textContent = `Questão ${current + 1} de ${questions.length}`;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('progress-fill').style.width = `${(current / questions.length) * 100}%`;
+  document.getElementById('score-display').textContent = `⭐ ${score} pontos`;
+
+  const letters = ['A', 'B', 'C', 'D'];
+  const optsEl = document.getElementById('options');
+  optsEl.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option';
+    div.innerHTML = `<div class="opt-letter">${letters[i]}</div><div class="opt-text">${opt}</div>`;
+    div.onclick = () => selectOption(i);
+    optsEl.appendChild(div);
+  });
+
+  document.getElementById('feedback').className = 'hidden';
+  document.getElementById('feedback').innerHTML = '';
+  document.getElementById('btn-next').classList.add('hidden');
+}
+
+function selectOption(idx) {
+  if (answered) return;
+  answered = true;
+
+  const q = questions[current];
+  const opts = document.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('disabled'));
+
+  const isCorrect = idx === q.answer;
+  opts[idx].classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) opts[q.answer].classList.add('correct');
+
+  if (isCorrect) score++;
+
+  const fb = document.getElementById('feedback');
+  fb.className = `feedback ${isCorrect ? 'correct-fb' : 'wrong-fb'}`;
+  fb.innerHTML = `<strong>${isCorrect ? '✅ Correto!' : '❌ Incorreto!'}</strong>${q.fb}`;
+  fb.classList.remove('hidden');
+
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.textContent = current < questions.length - 1 ? 'Próxima questão →' : 'Ver resultado →';
+  nextBtn.classList.remove('hidden');
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showResult();
+  } else {
+    loadQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quiz').classList.add('hidden');
+  const result = document.getElementById('result');
+  result.classList.remove('hidden');
+
+  const pct = Math.round((score / questions.length) * 100);
+  let icon, title, label;
+
+  if (pct >= 80) {
+    icon = '🏆'; title = 'Excelente! Parabéns!';
+    label = 'Você demonstrou ótimo conhecimento sobre LGPD. Continue assim!';
+    document.getElementById('result-score').style.background = 'linear-gradient(135deg, #10b981, #34d399)';
+    document.getElementById('result-score').style.webkitBackgroundClip = 'text';
+    document.getElementById('result-score').style.webkitTextFillColor = 'transparent';
+  } else if (pct >= 60) {
+    icon = '✅'; title = 'Bom trabalho!';
+    label = 'Você tem uma boa base, mas há tópicos para revisar.';
+  } else {
+    icon = '📚'; title = 'Continue Estudando!';
+    label = 'Recomendamos rever o treinamento antes de refazer o quiz.';
+    document.getElementById('result-score').style.background = 'linear-gradient(135deg, #f59e0b, #fbbf24)';
+    document.getElementById('result-score').style.webkitBackgroundClip = 'text';
+    document.getElementById('result-score').style.webkitTextFillColor = 'transparent';
+  }
+
+  document.getElementById('result-icon').textContent = icon;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-score').textContent = `${score}/${questions.length}`;
+  document.getElementById('result-label').textContent = label;
+  document.getElementById('rb-correct').textContent = score;
+  document.getElementById('rb-wrong').textContent = questions.length - score;
+  document.getElementById('rb-pct').textContent = `${pct}%`;
+}
+
+function restartQuiz() {
+  current = 0; score = 0; answered = false;
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  loadQuestion();
+}
+</script>
+</body>
+</html>
